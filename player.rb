@@ -1,11 +1,10 @@
 require_relative 'base_stats'
 
 class Player
-	def initialize(name, role, race, alignment)
+	def initialize(name, race, role)
 		@name = name;
 		@class = role;
 		@race = race;
-		@alignment = alignment;
 		@level = 1;
 		@abilities = {
 			"Str" => 13,
