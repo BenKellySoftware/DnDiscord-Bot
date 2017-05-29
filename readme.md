@@ -1,10 +1,11 @@
 # D&Discord Bot
 ## Installation
 `gem install discordrb`
+
 ## Future Features (Hopefully):
 
-Roll/ Order ability scores:*
-Choose from either the standard set, standard rolling rules. Then ask for order (write abilities from highest to lowest).
+*Roll/ Order ability scores:*
+*Choose from either the standard set, standard rolling rules. Then ask for order (write abilities from highest to lowest).*
 
 Create Player, Name, race, class, starting level, ability scores (manual Entry or done through bot)
 
