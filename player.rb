@@ -27,13 +27,13 @@ class Player
 		else
 			roll = roll(20)
 		end
-		print "With a #{modifier > 0 ? "+": ""}#{modifier} modifier, "
+		message = "With a #{modifier > 0 ? "+": ""}#{modifier} modifier, "
 		if (roll + modifier >= difficulty || roll == 20) && roll != 1
-			print "you Successed "
+			message += "you successed"
 		else
-			print "you Failed "
+			message += "you failed"
 		end
-		puts "with a total score of #{roll + modifier}" 
+		return "#{message} with a total score of #{roll + modifier}" 
 	end
 
 	#Stat Getters

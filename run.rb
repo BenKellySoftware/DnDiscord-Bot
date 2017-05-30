@@ -1,45 +1,38 @@
 require 'discordrb'
 require 'yaml'
+require_relative 'forms'
 require_relative 'player'
+require_relative 'roll'
 
 config = YAML.load_file("config.yml")
 
 players = {}
 
-#Dice Rolls
-def rollDouble(advantage)
-	r1 = roll(20)
-	r2 = roll(20)
-	print "Rolled #{r1} and #{r2}, "
-	if advantage
-		puts "using #{[r1, r2].max}" 
-		return [r1, r2].max
-	else
-		puts "using #{[r1, r2].min}" 
-		return [r1, r2].min
-	end
-	
-end
+#Test Character
+players["Drizzt"] = Player.new("Drizzt Do'urden", "Drow", "Ranger")
 
-def roll (die)
-	return 1 + Random.rand(die)
-end
+Bot = Discordrb::Bot.new token: config["token"], client_id: config["client-id"]
 
-bot = Discordrb::Bot.new token: config["token"], client_id: config["client-id"]
-
-bot.message(in: "dnd") do |event|
-	if event.message.content.downcase.start_with? "create player"
-		#Name, Class, Race, Alignment
-		params = event.message.content[14..-1].split(", ");
-		if params.length != 4
-			event.respond("Not the correct number of parameters (need Name, Class, Race, Alignment)")
+Bot.message(in: config["channel"]) do |event|
+	message = event.content
+	# Add the Async Form to each user who uses the bot
+	event.user.extend(AsyncForms)
+	if event.user.form
+		if message.downcase.eql? "cancel"
+			event.user.form = nil
 		else
-			players[params[0].split(" ").first] = Player.new(params[0],params[1],params[2],params[3])
-			event.respond("Created Player #{params[0].split(" ").first}")
+			event.user.form.enter(message, event)
 		end
-	elsif event.message.content.downcase.include? "roll"
+	elsif message.downcase.start_with? "create"
+		params = message.split(" ").drop(1)
+		if params[0].eql? "player"
+			event.user.form = Form.new(Forms[:player], "name")
+			event.user.form.respond(event)
+		end
+		# Todo: Expand with other create forms
+	elsif message.downcase.start_with? "roll"
 		#Array of either XdY or X
-		params = event.message.content[4..-1].delete(" ").split(/(?=[+-])/)
+		params = message[4..-1].delete(" ").split(/(?=[+-])/)
 		total = 0
 		rolls = []
 		params.each do |param|
@@ -57,10 +50,15 @@ bot.message(in: "dnd") do |event|
 			event.respond("Rolled #{rolls.join(", ")}")	
 		end
 		event.respond("Rolled a total of #{total}")
+	elsif players.keys.include? message.split(" ").first
+		player = players[message.split(" ").first]
+		params = message.split(" ").drop(1)
+		if params[0].eql? "saving" and params[1].eql? "throw"
+			event.respond(player.savingThrow(params[2], params[3]))
+		end
 	else
 		event.respond("Invalid Command")
 	end
-
 end
 
-bot.run
+Bot.run
