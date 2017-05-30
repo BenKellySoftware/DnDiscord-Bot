@@ -6,8 +6,8 @@
 
 ## Completed Stuff
 - Roll Dice
-    Start with 'roll', can chain together multiple dice and constants, for example:
-    `roll xdy + z`
+>    Start with 'roll', can chain together multiple dice and constants, for example:
+>    `roll xdy + z`
 - Create Player
     Start with 'create player', starts a multi-line form:
     ```
@@ -22,8 +22,8 @@
     yes
     ```
 - Saving Throws
-    Start with player name, then 'saving throw' then the ability.
-    `Drizzt saving throw dexterity`
+>    Start with player name, then 'saving throw' then the ability.
+>    `Drizzt saving throw dexterity`
 ## Future Features (Hopefully):
 
 ### Database
