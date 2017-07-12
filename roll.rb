@@ -8,8 +8,7 @@ def rollDouble(advantage)
 	else
 		puts "using #{[r1, r2].min}" 
 		return [r1, r2].min
-	end
-	
+	end	
 end
 
 def roll (die)

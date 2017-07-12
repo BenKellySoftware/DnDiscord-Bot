@@ -6,10 +6,10 @@ require_relative 'roll'
 
 config = YAML.load_file("config.yml")
 
-players = {}
+$players = {}
 
 #Test Character
-players["Drizzt"] = Player.new("Drizzt Do'urden", "Drow", "Ranger")
+$players["Drizzt"] = Player.new("Drizzt Do'urden", "Drow", "Ranger")
 
 Bot = Discordrb::Bot.new token: config["token"], client_id: config["client-id"]
 
@@ -25,7 +25,8 @@ Bot.message(in: config["channel"]) do |event|
 		end
 	elsif message.downcase.start_with? "create"
 		params = message.split(" ").drop(1)
-		if params[0].eql? "player"
+		puts params
+		if params[0].downcase.eql? "player"
 			event.user.form = Form.new(Forms[:player], "name")
 			event.user.form.respond(event)
 		end
@@ -50,12 +51,16 @@ Bot.message(in: config["channel"]) do |event|
 			event.respond("Rolled #{rolls.join(", ")}")	
 		end
 		event.respond("Rolled a total of #{total}")
-	elsif players.keys.include? message.split(" ").first
-		player = players[message.split(" ").first]
+	elsif $players.keys.include? message.split(" ").first
+		player = $players[message.split(" ").first]
 		params = message.split(" ").drop(1)
-		if params[0].eql? "saving" and params[1].eql? "throw"
-			event.respond(player.savingThrow(params[2], params[3]))
+		# checks if there are at least the 4 other required parameters first, then if the names are correct
+		if params[3] and params[0].downcase.eql? "saving" and params[1].downcase.eql? "throw"
+			event.respond(player.savingThrow(params[2], params[3].to_i))
+		else
+			event.respond("#{player.name} is a level #{player.level} #{player.race} #{player.class}")
 		end
+			
 	else
 		event.respond("Invalid Command")
 	end

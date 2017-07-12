@@ -1,6 +1,7 @@
 require_relative 'base_stats'
 
 class Player
+	attr_reader :name, :race, :class, :level
 	def initialize(name, race, role)
 		@name = name;
 		@class = role;
@@ -36,6 +37,11 @@ class Player
 		return "#{message} with a total score of #{roll + modifier}" 
 	end
 
+	def maxHealth
+		#Replace with class hitdie, just d8 for now
+		hitdie = 8
+		return ((@level-1)*((hitdie/2)+1))+hitdie
+	end
 	#Stat Getters
 	def proficiencyBonus
 		(@level+7)/4

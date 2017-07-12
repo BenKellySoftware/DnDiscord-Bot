@@ -21,7 +21,7 @@ Forms = {
 			"next" => nil
 		},
 		:submit => Proc.new do |responses|
-  		players[responses["name"].split(" ").first] = Player.new(responses["name"], responses["race"], responses["class"])
+  		$players[responses["name"].split(" ").first] = Player.new(responses["name"], responses["race"], responses["class"])
   	end
 	}
 }
