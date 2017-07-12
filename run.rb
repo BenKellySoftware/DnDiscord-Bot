@@ -18,7 +18,7 @@ def commands(event)
 	message = event.content
 	if message.downcase.start_with? "create"
 		params = params(message)
-		# always need to check if there are the right number of params
+		# Always need to check if there are the right number of params
 		if params[0] and params[0].downcase.eql? "player"
 			return createPlayer(event)
 		elsif params[0] and params[0].downcase.eql? "npc"

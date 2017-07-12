@@ -1,5 +1,5 @@
 module AsyncForms
-  attr_accessor :form
+	attr_accessor :form
 end
 
 Forms = {
@@ -41,8 +41,8 @@ class Form
 				event.user.form = nil
 				return nil
 			elsif @form.has_key? response.downcase
-				@field = response.downcase	
-				return respond() 	 
+				@field = response.downcase
+				return respond()
 			else
 				return "Invalid"
 			end
