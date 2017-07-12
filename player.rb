@@ -8,33 +8,37 @@ class Player
 		@race = race;
 		@level = 1;
 		@abilities = {
-			"Str" => 13,
-			"Dex" => 15,
-			"Con" => 13,
-			"Int" => 10,
-			"Wis" => 8,
-			"Cha" => 17
+			"str" => 13,
+			"dex" => 15,
+			"con" => 13,
+			"int" => 10,
+			"wis" => 8,
+			"cha" => 17
 		}
 		@proficiencies = ["Str", "Dex", "Deception", "Performance", "Slight of Hand"]
 	end
 
 	def savingThrow(abilityName, difficulty, advantage = "", extra = 0)
-		modifier = savingThrowModifier(abilityName) + extra
-		
-		if advantage == "advantage"
-			roll = rollDouble(true)
-		elsif advantage == "disadvantage"
-			roll = rollDouble(false)
-		else
-			roll = roll(20)
+		begin
+			modifier = savingThrowModifier(abilityName.downcase) + extra
+			
+			if advantage == "advantage"
+				roll = rollDouble(true)
+			elsif advantage == "disadvantage"
+				roll = rollDouble(false)
+			else
+				roll = roll(20)
+			end
+			message = "With a #{modifier > 0 ? "+": ""}#{modifier} modifier, "
+			if (roll + modifier >= difficulty || roll == 20) && roll != 1
+				message += "you successed"
+			else
+				message += "you failed"
+			end
+			return "#{message} with a total score of #{roll + modifier}" 
+		rescue
+			return "Saving throw did not execute properly, ensure the parameters are the ability name (Str, Dex, Con, Int, Wis, Cha), followed by the difficulty as a whole number"
 		end
-		message = "With a #{modifier > 0 ? "+": ""}#{modifier} modifier, "
-		if (roll + modifier >= difficulty || roll == 20) && roll != 1
-			message += "you successed"
-		else
-			message += "you failed"
-		end
-		return "#{message} with a total score of #{roll + modifier}" 
 	end
 
 	def maxHealth

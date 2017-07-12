@@ -21,8 +21,8 @@ Forms = {
 			"next" => nil
 		},
 		:submit => Proc.new do |responses|
-  		$players[responses["name"].split(" ").first] = Player.new(responses["name"], responses["race"], responses["class"])
-  	end
+			$players[responses["name"].split(" ").first] = Player.new(responses["name"], responses["race"], responses["class"])
+		end
 	}
 }
 
@@ -37,22 +37,23 @@ class Form
 		if @field == 'confirm'
 			if ['yes', 'y'].any? { |word| response.include?(word) }
 				@form[:submit].call(@responses)
-				# Delete Itself
+				# Detached itself from the user
 				event.user.form = nil
+				return nil
 			elsif @form.has_key? response.downcase
 				@field = response.downcase	
-				respond(event) 	 
+				return respond() 	 
 			else
-				event.respond("Invalid")
+				return "Invalid"
 			end
 		else
 			@responses[@field] = response
 			@field = @form[@field]["next"]
-			respond(event)
+			return respond()
 		end
 	end
 
-	def respond(event)
-		event.respond(@form[@field]["request"])
+	def respond()
+		return @form[@field]["request"]
 	end
 end
