@@ -12,26 +12,26 @@ Races = [
 ]
 
 SkillsRelatedAbility = {
-	"Athletics" => "Str",
+	"Athletics" => "str",
 
-	"Acrobatics" => "Dex",
-	"Sleight of Hand" => "Dex",
-	"Stealth" => "Dex",
+	"Acrobatics" => "dex",
+	"Sleight of Hand" => "dex",
+	"Stealth" => "dex",
 
-	"Arcana" => "Int",
-	"History" => "Int",
-	"Investigation" => "Int",
-	"Nature" => "Int",
-	"Religion" => "Int",
+	"Arcana" => "int",
+	"History" => "int",
+	"Investigation" => "int",
+	"Nature" => "int",
+	"Religion" => "int",
 
-	"Animal Handling" => "Wis",
-	"Insight" => "Wis",
-	"Medicine" => "Wis",
-	"Perception" => "Wis",
-	"Survival" => "Wis",
+	"Animal Handling" => "wis",
+	"Insight" => "wis",
+	"Medicine" => "wis",
+	"Perception" => "wis",
+	"Survival" => "wis",
 
-	"Deception" => "Cha",
-	"Intimidation" => "Cha",
-	"Performance" => "Cha",
-	"Persuasion" => "Cha",
+	"Deception" => "cha",
+	"Intimidation" => "cha",
+	"Performance" => "cha",
+	"Persuasion" => "cha",
 }
