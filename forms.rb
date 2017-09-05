@@ -11,7 +11,7 @@ Forms = {
 		"name" => {
 			"request" => "The shorthand name I'll refer to you as:",
 			"next" => "race",
-			"validator" => Proc.new do |responses|
+			"validator" => lambda do |responses|
 				if $client["characters"].find({"name" => responses["name"]}).count() > 0
 					responses["errorMsg"] = "A character with that name exists"
 					false
@@ -23,7 +23,7 @@ Forms = {
 		"race" => {
 			"request" => "Race: \nType full race name, including subrace (e.g. High-Elf, Forest Gnome, Duergar etc.) \nType 'list' for a list of the races (TODO).",
 			"next" => "abilities",
-			"validator" => Proc.new do |responses|
+			"validator" => lambda do |responses|
 				if responses["race"].downcase.eql? "list"
 					responses["errorMsg"] = "TODO: List races"
 					false
@@ -42,7 +42,7 @@ Forms = {
 		"abilities" => {
 			"request" => "Ability Scores (raw numbers, pre-modifiers), write 6 numbers, comma seperated, between 1 and 20 in the order str,dex,con,int,wis,cha:",
 			"next" => "class",
-			"validator" => Proc.new do |responses|
+			"validator" => lambda do |responses|
 					abilityArr = responses['abilities'].split(',').map(&:to_i)
 					if abilityArr.length == 6 and abilityArr.all? { |ability| ability <= 20 }
 						responses["abilityArr"] = abilityArr
@@ -56,7 +56,7 @@ Forms = {
 		"class" => {
 			"request" => "Class you want to take your first level in:",
 			"next" =>	"background",
-			"validator" => Proc.new do |responses|
+			"validator" => lambda do |responses|
 				if responses["class"].downcase.eql? "list"
 					responses["errorMsg"] = "TODO: List class"
 					false
@@ -75,6 +75,10 @@ Forms = {
 		},
 		"background" => {
 			"request" => "Your characters background:",
+			"next" => "skills"
+		},
+		"skills" => {
+			"request" => "Your skill proficiencies, comma seperated:",
 			"next" => "confirm"
 		},
 		"confirm" => {
@@ -100,9 +104,16 @@ Forms = {
 					"cha" => responses['abilityArr'][5]
 				},
 				"features" => []
-				# will do a initial level up here 
 			}
-			characterJSON["features"].push responses["classObj"]['features']['1']
+
+			# Apply weapon/ armour/ tool proficiencies
+
+			# Choose skills
+
+			# Apply race features
+
+			# Initial Level up
+
 			$client['characters'].insert_one characterJSON
 		end
 	},

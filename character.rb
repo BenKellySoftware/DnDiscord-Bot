@@ -4,14 +4,15 @@ require_relative 'roll'
 class Character
 	attr_reader :name, :fullName, :race
 
-	def initialize(obj)
+	def initialize(obj, player)
+		@player = player
 		obj.each_pair { |name, val| 
 			instance_variable_set("@#{name}", val)
 		}
 		@updates = {}
 
-		
-		
+
+
 		@totalLevel = @levels.sum {|_class| _class["level"] }
 		
 	end
@@ -59,11 +60,15 @@ class Character
 			return proficiencyBonus + abilityModifier(SkillsRelatedAbility[skill])
 		elsif @expertise.include? skill
 			return proficiencyBonus * 2 + abilityModifier(SkillsRelatedAbility[skill])
-		# elsif @features.keys.include? "Jack of All Trades"
-		# 	return proficiencyBonus / 2
+		elsif findFeature("Jack of All Trades")
+			return proficiencyBonus / 2 + abilityModifier(SkillsRelatedAbility[skill])
 		else
 			return abilityModifier(SkillsRelatedAbility[skill])
 		end
+	end
+
+	def findFeature(name)
+		@features.detect { |feature| feature.name == name }
 	end
 
 	def savingThrowModifier(abilityName)
@@ -176,7 +181,7 @@ playerHash = {
 		"wis": 12,
 		"cha": 19
 	},
-	"proficiencies": ["Arcana", "History", "Nature", "Perception", "Persuasion"],
+	"skills": ["Arcana", "History", "Nature", "Perception", "Persuasion"],
 	"savingThrows": ["dex", "cha"],
 	"expertise": ["Sleight of Hand", "Performance"],
 	"languages": ["Common", "Elvish", "Undercommon"],
