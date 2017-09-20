@@ -84,8 +84,7 @@ Forms = {
 		"confirm" => {
 			"request" => "Type yes to move on and apply features, or a field name to edit:"
 		},
-		"proc" => true,
-		"submit" => Proc.new do |responses|
+		"submit" => lambda do |responses|
 			characterJSON = {
 				"name" => responses["name"],
 				"fullName" => responses["fullName"],
@@ -96,49 +95,36 @@ Forms = {
 					"level" => 0
 				}],
 				"abilities" => {
-					"str" => responses['abilityArr'][0],
-					"dex" => responses['abilityArr'][1],
-					"con" => responses['abilityArr'][2],
-					"int" => responses['abilityArr'][3],
-					"wis" => responses['abilityArr'][4],
-					"cha" => responses['abilityArr'][5]
+					"str" => responses['abilityArr'][0] + (raceObj['abilities']['str'] || 0),
+					"dex" => responses['abilityArr'][1] + (raceObj['abilities']['dex'] || 0),
+					"con" => responses['abilityArr'][2] + (raceObj['abilities']['con'] || 0),
+					"int" => responses['abilityArr'][3] + (raceObj['abilities']['int'] || 0),
+					"wis" => responses['abilityArr'][4] + (raceObj['abilities']['wis'] || 0),
+					"cha" => responses['abilityArr'][5] + (raceObj['abilities']['cha'] || 0)
 				},
 				"features" => []
 			}
 
 			# Apply weapon/ armour/ tool proficiencies
 
-			# Choose skills
-
 			# Apply race features
-
+			characterJSON['features'].push(responses['raceObj'])
+			character = Character.new(characterJSON)
 			# Initial Level up
+			character.levelUp(responses['class'])
 
 			$client['characters'].insert_one characterJSON
 		end
-	},
-	'ability score improvement' => {
-		"ability 1" => {
-			"request" => "Ability One:",
-			"next" => "ability 2"
-		},
-		"ability 2" => {
-			"request" => "Ability Two:",
-			"next" => "confirm"
-		},
-		"confirm" => {
-			"request" => "Type yes to confirm, or a field name to edit:"
-		},
-		"submit" => "increase %1 1; increase %2 1;"
 	}
 }
 
 class Form
-	def initialize(template, initField)
+	def initialize(template, initField, user)
 		@form = template
 		@field = initField
 		@responses = {}
 		@editing = false
+		@user = user
 	end
 
 	def enter(response, event)
@@ -148,7 +134,7 @@ class Form
 					@form["submit"].call(@responses)	
 				end
 				# Detached itself from the user
-				event.user.form = nil
+				@user.form = nil
 				return nil
 			elsif @form.has_key? response.downcase
 				@editing = true

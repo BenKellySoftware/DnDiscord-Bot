@@ -11,10 +11,7 @@ class Character
 		}
 		@updates = {}
 
-
-
 		@totalLevel = @levels.sum {|_class| _class["level"] }
-		
 	end
 
 	def savingThrow(abilityName, difficulty, advantage = "", extra = 0)
@@ -114,7 +111,7 @@ class Character
 			end
 
 		#Class Features
-			features = $client['classes'].aggregate([
+			features = Client['classes'].aggregate([
 				{ "$match": {"name": className} },
 				{ "$unwind": "$features.#{classObj['level']}" },
 				{ "$lookup": {
@@ -129,7 +126,7 @@ class Character
 
 			@features.push(features)
 		#Query subclass feats and apply
-			features = $client['classes'].aggregate([
+			features = Client['classes'].aggregate([
 				{ "$match": {"name": className} },
 				{ "$unwind": "$subclasses.#{classObj['subclass']}.#{classObj['level']}" },
 				{ "$lookup": {
@@ -146,6 +143,7 @@ class Character
 
 		#Update 
 			@updates["levels"].update(@levels)
+			@updates["features"].update(@features)
 		#These are the changes needed
 			puts @updates
 	end
@@ -188,7 +186,7 @@ playerHash = {
 	"features": []
 }
 
-# player = Player.new($client[:characters].find({'name' : 'Bardee'}).first());
+# player = Player.new(Client[:characters].find({'name' : 'Bardee'}).first());
 # player = Player.new(playerHash)
 
 # puts player.skillModifier('Sleight of Hand');
