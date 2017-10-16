@@ -30,7 +30,11 @@ def rollMessage(params)
 				total += param.to_i
 			end
 		end
-		return "Rolled #{rolls.join(", ")} for a total of #{total}"
+		if params.length == 1
+			return "Rolled #{total}"
+		else 
+			return "Rolled #{rolls.join(", ")} for a total of #{total}"
+		end
 	rescue
 		return "Invalid roll, only include rolls or modifiers in the form XdY and X, with + or - in between"
 	end

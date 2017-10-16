@@ -1,7 +1,3 @@
-module AsyncForms
-	attr_accessor  :form
-end
-
 Forms = {
 	"create character" => {
 		"fullName" => {

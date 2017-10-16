@@ -25,7 +25,7 @@ class Character
 			else
 				roll = roll(20)
 			end
-			message = "With a #{modifier > 0 ? "+": ""}#{modifier} modifier, "
+			message = "Rolled #{roll}. With a #{modifier > 0 ? "+": ""}#{modifier} modifier, "
 			if (roll + modifier >= difficulty or roll == 20) && roll != 1
 				message += "you successed"
 			else
@@ -49,7 +49,7 @@ class Character
 	end
 
 	def abilityModifier (abilityName)
-		(@abilities[abilityName]-10)/2
+		(@abilities[abilityName.downcase]-10)/2
 	end
 
 	def skillModifier(skill)
