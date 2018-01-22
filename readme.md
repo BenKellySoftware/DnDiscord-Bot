@@ -5,6 +5,9 @@
 3. `ruby run.rb`
 
 ## Completed Stuff
+- General Use
+>	Command words and parameters are seperated by space, but multi word parameters can be grouped with double quotes e.g. `Proficiencies add skill "Animal Handling"`
+
 - Roll Dice
 >	Start with 'roll', can chain together multiple dice and constants, for example:
 >	`roll xdy + z`
@@ -27,7 +30,14 @@
 >	`Load Drizzt`
 - Saving Throws
 >	Start with player name (If DM), then 'saving throw' then the ability.
->	`Saving throw dexterity`
+>	`Save dex 10`
+- Proficiencies
+>	Add, remove and list proficiencies/ expertise for skills, saves, weapons, armour, and tools
+>	Start command with 'proficiencies', then either 'list', or 'add'/'remove' followed by the category (listed above, in singular form e.g. 'weapon'), then the name of the proficiency.
+>	Skills or tools players have expertise in are in their own expertise category, and will be automatically removed from their respective categories when added.
+>	`Proficiencies list`
+>	`Proficiencies add skill history`
+>	`Proficiencies add expertise 'theives tools'`
 
 ## Future Features (Hopefully):
 
@@ -48,7 +58,6 @@
 	* Check DC of challenge (pull from list, modify based on conditions e.g climb rope is 5dc, +5 if windy)
 - Add/Get Spells and Abilitys (Details from database)
 - Manage player health, spell and ability uses
-
 
 ### Attacks and Spells
 - Manually deal damage to players/ monsters (DM Override)

@@ -9,14 +9,13 @@ class Character
 		obj.each_pair { |name, val| 
 			instance_variable_set("@#{name}", val)
 		}
-		@updates = {}
 
 		@totalLevel = @levels.sum {|_class| _class["level"] }
 	end
 
 	def savingThrow(abilityName, difficulty, advantage = "", extra = 0)
 		begin
-			modifier = extra + abilityModifier(abilityName) + ((@savingThrows.include? abilityName) ? proficiencyBonus : 0)
+			modifier = extra + abilityModifier(abilityName) + ((@saves.include? abilityName) ? proficiencyBonus : 0)
 
 			if advantage == "advantage"
 				roll = rollDouble(true)
@@ -146,6 +145,99 @@ class Character
 			@updates["features"].update(@features)
 		#These are the changes needed
 			puts @updates
+	end
+
+	def addProficiency(category, name)
+		begin
+			if category.eql? "skill"
+				if @skills.include?(name)
+					return "Already proficient in that skill"
+				elsif !["Athletics","Acrobatics","Sleight of Hand",
+							 "Stealth","Arcana","History","Investigation",
+							 "Nature","Religion","Animal Handling","Insight",
+							 "Medicine","Perception","Survival","Deception",
+							 "Intimidation","Performance","Persuasion"].include?(name)
+					return "#{name} isn't a valid skill name"
+				else
+					@skills.push(name)
+				end
+			elsif category.eql? "save"
+				if @save.include?(name)
+					return "Already proficient in that save"
+				elsif !["Str","Dex","Con", "Int","Wis","Cha"].include?(name)
+					return "#{name} isn't a valid attribute"
+				else
+					@skills.push(name)
+				end
+			elsif category.eql? "weapon"
+				if @weaponProficiencies.include?(name)
+					return "Already proficient with #{name} weapons"
+				else
+					@weaponProficiencies.push(name)
+				end
+			elsif category.eql? "armour"
+				if @armourProficiencies.include?(name)
+					return "Already proficient with #{name} armour"
+				else
+					@armourProficiencies.push(name)
+				end
+			elsif category.eql? "tool"
+				if @toolProficiencies.include?(name)
+					return "Already proficient with #{name}"
+				else
+					@toolProficiencies.push(name)
+				end
+			elsif category.eql? "expertise"
+				if @toolProficiencies.include?(name)
+					return "Already an expert in #{name}"
+				else
+					@expertise.push(name)
+					@skills.delete(name)
+					@toolProficiencies.delete(name)
+				end
+			else
+				return "#{category.capitalize} is not a valid category"
+			end
+			return "#{category.capitalize} proficiency added"
+		rescue
+			return "Adding proficiency did not execute properly, not sure why, so this message really shouldn't appear"
+		end
+	end
+
+	def removeProficiency(category, name)
+		begin
+			if category.eql? "skill"
+				@skills.delete(name)
+			elsif category.eql? "save"
+				@skills.delete(name)
+			elsif category.eql? "weapon"
+				@weaponProficiencies.delete(name)
+			elsif category.eql? "armour"
+				@armourProficiencies.delete(name)
+			elsif category.eql? "tool"
+				@toolProficiencies.delete(name)
+			else
+				return "#{category} is not a valid category"
+			end
+			return "Proficiency removed"
+		rescue
+			return "Removing proficiency did not execute properly, not sure why, probably not good"
+		end
+	end
+
+	def listProficiencies
+		begin
+			return <<~HEREDOC
+				**Skills:** #{@skills.empty?? 'None' : @skills.join(', ')}\n
+				**Saving Throws:** #{@saves.empty?? 'None' : @saves.join(', ')}\n
+				**Weapons:** #{@weaponProficiencies.empty?? 'None' : @weaponProficiencies.join(', ')}\n
+				**Armour:** #{@armourProficiencies.empty?? 'None' : @armourProficiencies.join(', ')}\n
+				**Tools:** #{@toolProficiencies.empty?? 'None' : @toolProficiencies.join(', ')}\n
+				**Expertise:** #{@expertise.empty?? 'None' : @expertise.join(', ')}"
+			HEREDOC
+		rescue
+			return "List did not execute properly, uh oh"
+		end
 	end
 end
 

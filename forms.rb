@@ -7,7 +7,7 @@ Forms = {
 		"name" => {
 			"request" => "The shorthand name I'll refer to you as:",
 			"next" => "race",
-			"validator" => lambda do |responses|
+			"validate" => lambda do |responses|
 				if $client["characters"].find({"name" => responses["name"]}).count() > 0
 					responses["errorMsg"] = "A character with that name exists"
 					false
@@ -19,7 +19,7 @@ Forms = {
 		"race" => {
 			"request" => "Race: \nType full race name, including subrace (e.g. High-Elf, Forest Gnome, Duergar etc.) \nType 'list' for a list of the races (TODO).",
 			"next" => "abilities",
-			"validator" => lambda do |responses|
+			"validate" => lambda do |responses|
 				if responses["race"].downcase.eql? "list"
 					responses["errorMsg"] = "TODO: List races"
 					false
@@ -38,7 +38,7 @@ Forms = {
 		"abilities" => {
 			"request" => "Ability Scores (raw numbers, pre-modifiers), write 6 numbers, comma seperated, between 1 and 20 in the order str,dex,con,int,wis,cha:",
 			"next" => "class",
-			"validator" => lambda do |responses|
+			"validate" => lambda do |responses|
 					abilityArr = responses['abilities'].split(',').map(&:to_i)
 					if abilityArr.length == 6 and abilityArr.all? { |ability| ability <= 20 }
 						responses["abilityArr"] = abilityArr
@@ -52,7 +52,7 @@ Forms = {
 		"class" => {
 			"request" => "Class you want to take your first level in:",
 			"next" =>	"background",
-			"validator" => lambda do |responses|
+			"validate" => lambda do |responses|
 				if responses["class"].downcase.eql? "list"
 					responses["errorMsg"] = "TODO: List class"
 					false
@@ -141,8 +141,8 @@ class Form
 			end
 		else
 			@responses[@field] = response
-			if @form[@field]["validator"]
-				valid = @form[@field]["validator"].call(@responses)
+			if @form[@field]["validate"]
+				valid = @form[@field]["validate"].call(@responses)
 				# puts @responnses["errorMsg"]
 			else
 				valid = true
