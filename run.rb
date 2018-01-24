@@ -7,6 +7,32 @@ require_relative 'forms'
 require_relative 'character'
 require_relative 'roll'
 
+Skills = ["Athletics",
+					"Acrobatics",
+					"Sleight of Hand",
+					"Stealth",
+					"Arcana",
+					"History",
+					"Investigation",
+					"Nature",
+					"Religion",
+					"Animal Handling",
+					"Insight",
+					"Medicine",
+					"Perception",
+					"Survival",
+					"Deception",
+					"Intimidation",
+					"Performance",
+					"Persuasion"]
+
+Abilities = ["Str",
+						 "Dex",
+						 "Con",
+						 "Int",
+						 "Wis",
+						 "Cha"]
+
 config = YAML.load_file("config.yml")
 
 $party = []
@@ -124,7 +150,15 @@ def loadCharacter(event)
 end
 
 def playerCommands(character, params)
-	if params[1] and params[0].downcase.eql? "proficiencies"
+	if params[1] and params[0].downcase.eql? "level" and params[1].downcase.eql? "up"
+		if character.levels.length == 1
+			return character.levelUp(character.levels[0]['class'])
+		elsif params[2]
+			return character.levelUp(params[2])
+		else
+			return "Must specify class you're leveling if multiclassing."
+		end
+	elsif params[1] and params[0].downcase.eql? "proficiencies"
 		if params[1].downcase.eql? "list"
 			return character.listProficiencies
 		elsif params[3] and params[1].downcase.eql? "add"
@@ -137,6 +171,8 @@ def playerCommands(character, params)
 		return character.savingThrow(params[1], params[2].to_i)
 	# elsif params[0] and params[0].downcase.eql? "summary"
 	# 	return "#{character.name} is a level #{character.level} #{character.race} #{character.class}"
+	elsif params[0].downcase.eql? "upload"
+		return character.upload
 	end
 end
 
