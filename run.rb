@@ -152,7 +152,7 @@ end
 def playerCommands(character, params)
 	if params[1] and params[0].downcase.eql? "level" and params[1].downcase.eql? "up"
 		if character.levels.length == 1
-			return character.levelUp(character.levels[0]['class'])
+			return character.levelUp(character.levels[0]['name'])
 		elsif params[2]
 			return character.levelUp(params[2])
 		else

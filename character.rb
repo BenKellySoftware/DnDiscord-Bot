@@ -82,14 +82,12 @@ class Character
 		end
 
 	def levelUp(className)
-		#Increase the numbers
-		@totalLevel += 1
-		classObj = @levels.detect {|x| x["name"].downcase == className.downcase}
-		puts classObj
+		classObj = @levels.detect {|x| x['name'].downcase == className.downcase}
 		if !classObj
 			return "Class does not exist"
 		end
 		classObj["level"] += 1
+		@totalLevel += 1
 
 		#Spellcasting
 			# if ["Bard","Cleric","Druid","Sorcerer","Wizard"].include? className
@@ -301,7 +299,7 @@ class Character
 					@armourProficiencies.delete(name)
 				elsif category.eql? "tool"
 					@toolProficiencies.delete(name)
-				elsif category.eql? "languages"
+				elsif category.eql? "language"
 					@languages.delete(name)
 				elsif category.eql? "expertise"
 					@expertise.delete(name)
